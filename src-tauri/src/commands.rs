@@ -5,8 +5,8 @@ use bupt_api::bupt_auth::bupt_auth;
 use std::collections::HashMap;
 
 #[tauri::command]
-pub async fn get_auth(account: String, password: String) -> Result<(), String> {
-    match bupt_auth(account, password).await {
+pub async fn get_auth(account: String, ucloud_password: String, jwxt_password: String) -> Result<(), String> {
+    match bupt_auth(account, ucloud_password, jwxt_password).await {
         Ok(_) => Ok(()),
         Err(e) => Err(e.to_string()),
     }
@@ -75,3 +75,14 @@ pub async fn download_assignment_file(
         Err(e) => Err(e.to_string()),
     }
 }
+
+// #[tauri::command]
+// pub async fn get_course_schedule(
+//     account: &str,
+//     password: &str,
+// ) -> Result<Vec<HashMap<String, String>>, String> {
+//     match process::course::process_course_schedule(account, password).await {
+//         Ok(vec) => Ok(vec),
+//         Err(e) => Err(e.to_string()),
+//     }
+// }

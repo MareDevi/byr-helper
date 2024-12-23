@@ -58,7 +58,7 @@ fn extract_auth_and_tenant(js_content: &str) -> (String, String) {
     (auth_token, tenant_id)
 }
 
-pub async fn bupt_auth(account: String, password: String) -> Result<()> {
+pub async fn bupt_auth(account: String, ucloud_password: String, jwxt_password: String) -> Result<()> {
     let auth_url = "https://auth.bupt.edu.cn/authserver/login?service=http://ucloud.bupt.edu.cn";
 
     let client = Client::builder()
@@ -73,7 +73,7 @@ pub async fn bupt_auth(account: String, password: String) -> Result<()> {
 
     let mut data = HashMap::new();
     data.insert("username", account.as_str());
-    data.insert("password", password.as_str());
+    data.insert("password", ucloud_password.as_str());
     data.insert("submit", &"登录");
     data.insert("type", &"username_password");
     data.insert("execution", &exe);
@@ -197,6 +197,9 @@ pub async fn bupt_auth(account: String, password: String) -> Result<()> {
     let user_id = json["user_id"].as_str().unwrap();
 
     let mut map = HashMap::new();
+    map.insert("account", account);
+    map.insert("ucloud_password", ucloud_password);
+    map.insert("jwxt_password", jwxt_password);
     map.insert("tenant_id", tenant_id);
     map.insert("blade", blade.to_string());
     map.insert("user_id", user_id.to_string());
