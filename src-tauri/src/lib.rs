@@ -15,6 +15,7 @@ pub fn run() {
             commands::download_assignment_file,
             commands::get_course_schedule,
             commands::get_notifications,
+            commands::get_courses
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

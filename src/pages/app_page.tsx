@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import HomePage from './home_page';
 import CoursePage from './course_page';
+import CourseSechdulePage from './course_sechdule_page';
 import NotificationPage from './notification_page';
 
 
@@ -56,6 +57,18 @@ export default function AppPage() {
                     </div>
 
                     <div className="hs-tooltip [--placement:right] inline-block">
+                        <button type="button" className="hs-tooltip-toggle size-[38px] inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" onClick={() => setActiveContent('courses')}>
+                        <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 12V4C20 2.89543 19.1046 2 18 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V18.5"/>
+                            <path d="M13 2V14L16.8182 11L20 14V5"/>
+                        </svg>
+                            <span className="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1.5 px-2.5 bg-gray-900 text-xs text-white rounded-lg whitespace-nowrap dark:bg-neutral-700" role="tooltip">
+                                Courses
+                            </span>
+                        </button>
+                    </div>
+
+                    <div className="hs-tooltip [--placement:right] inline-block">
                         <button type="button" className="hs-tooltip-toggle size-[38px] inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" onClick={() => setActiveContent('notifications')}>
                             <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
                             <span className="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1.5 px-2.5 bg-gray-900 text-xs text-white rounded-lg whitespace-nowrap dark:bg-neutral-700" role="tooltip">
@@ -70,8 +83,9 @@ export default function AppPage() {
             {/* Main Content */}
             <div className="flex-1 ml-20 p-4">
                 {activeContent === 'homepage' && <HomePage />}
-                {activeContent === 'course_sechdule' && <CoursePage />}
+                {activeContent === 'course_sechdule' && <CourseSechdulePage />}
                 {activeContent === 'notifications' && <NotificationPage />}
+                {activeContent === 'courses' && <CoursePage />}
             </div>
         </div>
     );

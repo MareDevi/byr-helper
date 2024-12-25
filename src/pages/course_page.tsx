@@ -1,52 +1,56 @@
 import { invoke } from '@tauri-apps/api/core';
 import { useAuth } from "../AuthContext";
 import { useEffect, useState } from 'react';
+import CardBuilder from '../components/card';
 
 export default function CoursePage() {
     const { authInfo } = useAuth();
-    const [htmlContent, setHtmlContent] = useState<string>('');
+    const [courseList, setCourseList] = useState<string[]>([]);
 
     useEffect(() => {
-        const fetchSchedule = async () => {
-            // 先尝试从缓存加载数据
-            const cachedData = localStorage.getItem('course_schedule');
-            const cachedTime = localStorage.getItem('course_schedule_time');
-            
-            if (cachedData && cachedTime) {
-                const timeDiff = Date.now() - parseInt(cachedTime);
-                // 如果缓存时间小于1小时，使用缓存数据
-                if (timeDiff < 60 * 60 * 1000) {
-                    setHtmlContent(cachedData);
-                    return;
-                }
+        // 先尝试从缓存加载数据
+        const cachedData = localStorage.getItem('courses');
+        const cachedTime = localStorage.getItem('courses_time');
+        
+        if (cachedData && cachedTime) {
+            const timeDiff = Date.now() - parseInt(cachedTime);
+            // 如果缓存时间小于5分钟，使用缓存数据
+            if (timeDiff < 5 * 60 * 1000) {
+                setCourseList(JSON.parse(cachedData));
             }
+        }
+        
+        // 无论是否有缓存，都在后台更新数据
+        courses();
+    }, []);
 
-            try {
-                const result = await invoke("get_course_schedule", { 
-                    account: authInfo[4], 
-                    password: authInfo[6] 
-                }) as string;
-                
-                setHtmlContent(result);
-                // 更新缓存
-                localStorage.setItem('course_schedule', result);
-                localStorage.setItem('course_schedule_time', Date.now().toString());
-            } catch (error) {
-                console.error("获取课程表失败:", error);
-            }
-        };
+    const courses = async () => {
+        try {
+            const result = await invoke<string[]>("get_courses", {
+                blade: authInfo[0],
+                tenantId: authInfo[1],
+                userId: authInfo[2],
+                authToken: authInfo[3],
+            });
+            setCourseList(result);
+            // 更新缓存
+            localStorage.setItem('courses', JSON.stringify(result));
+            localStorage.setItem('courses_time', Date.now().toString());
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
-        fetchSchedule();
-    }, [authInfo]);
+    const handleCardClick = (id: string) => {
+        // TODO: 处理课程点击事件
+        console.log('Course clicked:', id);
+    };
 
     return (
-        <div className="w-full h-full overflow-auto">
-            <div>
-                <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-neutral-200">本周课表</h1>
-            <div 
-                dangerouslySetInnerHTML={{ __html: htmlContent }}
-                className="course-schedule-container"
-            />
+        <div>
+            <div className="p-4">
+                <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-neutral-200">课程</h1>
+                <CardBuilder data={courseList} onCardClick={handleCardClick} />
             </div>
         </div>
     );

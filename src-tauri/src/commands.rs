@@ -100,3 +100,16 @@ pub async fn get_notifications(
         Err(e) => Err(e.to_string()),
     }
 }
+
+#[tauri::command]
+pub async fn get_courses(
+    blade: &str,
+    tenant_id: &str,
+    auth_token: &str,
+    user_id: &str,
+) -> Result<Vec<String>, String> {
+    match bupt_api::get_courses(blade, tenant_id, user_id, auth_token).await {
+        Ok(vec) => Ok(vec.into_iter().map(|v| v.to_string()).collect()),
+        Err(e) => Err(e.to_string()),
+    }
+}
