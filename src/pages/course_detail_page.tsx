@@ -125,43 +125,57 @@ export default function CourseDetailPage({ courseId }: CourseDetailPageProps) {
     };
 
     return (
-        <div className="w-full h-full overflow-auto p-4">
-            <div className="space-y-6">
-                <div>
-                    <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-neutral-200">课程详情</h1>
+        <div className="w-full h-full overflow-auto p-6">
+            <div className="max-w-6xl mx-auto space-y-8">
+                <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-md p-6">
+                    <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-neutral-100 border-b pb-4">
+                        课程详情
+                    </h1>
                     {courseDetail && (
-                        <div className="space-y-4">
-                            <p className="text-gray-700 dark:text-neutral-300">
-                                课程名称: {courseDetail.siteName}
-                            </p>
-                            <p className="text-gray-700 dark:text-neutral-300">
-                                课程类型: {courseDetail.courseType}
-                            </p>
-                            <div>
-                                <p className="text-gray-700 dark:text-neutral-300">授课教师:</p>
-                                <ul className="list-disc pl-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                                <div className="flex flex-col">
+                                    <span className="text-sm text-gray-500 dark:text-neutral-400">课程名称</span>
+                                    <span className="text-lg text-gray-800 dark:text-neutral-200">{courseDetail.siteName}</span>
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-sm text-gray-500 dark:text-neutral-400">课程类型</span>
+                                    <span className="text-lg text-gray-800 dark:text-neutral-200">{courseDetail.courseType}</span>
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <span className="text-sm text-gray-500 dark:text-neutral-400">授课教师</span>
+                                <div className="flex flex-wrap gap-2">
                                     {courseDetail.teachers.map((teacher, index) => (
-                                        <li key={index} className="text-gray-700 dark:text-neutral-300">
+                                        <span key={index} className="px-3 py-1 bg-gray-100 dark:bg-neutral-700 rounded-full text-gray-700 dark:text-neutral-300">
                                             {teacher.name}
-                                        </li>
+                                        </span>
                                     ))}
-                                </ul>
+                                </div>
                             </div>
                         </div>
                     )}
                 </div>
 
-                <div>
-                    <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-neutral-200">课程文件</h2>
-                    <div className="h-[30vh] overflow-auto">
-                        {tablebuilder({
-                            data: courseFiles,
-                            columns: fileColumns,
-                            rowKey: 'name',
-                            actionText: "下载",
-                            onAction: handleDownload
-                        })}
-                    </div>
+                <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-md p-6">
+                    <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-neutral-100 border-b pb-4">
+                        课程文件
+                    </h2>
+                    {courseFiles.length > 0 ? (
+                        <div className="overflow-auto rounded-lg border dark:border-neutral-700">
+                            {tablebuilder({
+                                data: courseFiles,
+                                columns: fileColumns,
+                                rowKey: 'name',
+                                actionText: "下载",
+                                onAction: handleDownload
+                            })}
+                        </div>
+                    ) : (
+                        <div className="text-center py-8 text-gray-500 dark:text-neutral-400">
+                            暂无课程文件
+                        </div>
+                    )}
                 </div>
             </div>
             <Alert 

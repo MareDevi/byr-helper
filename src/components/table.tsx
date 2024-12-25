@@ -10,6 +10,7 @@ interface TableProps {
     onRowClick?: (record: any) => void;
     actionText?: string;  // 添加操作按钮文本
     onAction?: (record: any) => void;  // 添加操作处理函数
+    hideAction?: boolean;  // 添加这一行
 }
 
 export function tablebuilder({ 
@@ -18,7 +19,8 @@ export function tablebuilder({
     rowKey, 
     onRowClick,
     actionText = "删除",  // 默认值为"删除"
-    onAction 
+    onAction,
+    hideAction = false  // 添加这个参数
 }: TableProps) {
     return (
         <div className="flex flex-col h-full">
@@ -31,9 +33,11 @@ export function tablebuilder({
                                     {column.title}
                                 </div>
                             ))}
-                            <div className="w-24 px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                                操作
-                            </div>
+                            {!hideAction && onAction && (
+                                <div className="w-24 px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                                    操作
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="divide-y divide-gray-200 dark:divide-neutral-700 block overflow-y-auto pb-4" style={{ maxHeight: 'calc(30vh - 48px)' }}>
@@ -48,8 +52,8 @@ export function tablebuilder({
                                         {item[column.key]}
                                     </div>
                                 ))}
-                                <div className="w-24 px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    {onAction && (
+                                {!hideAction && onAction && (
+                                    <div className="w-24 px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                                         <button 
                                             type="button" 
                                             onClick={(e) => {
@@ -60,8 +64,8 @@ export function tablebuilder({
                                         >
                                             {actionText}
                                         </button>
-                                    )}
-                                </div>
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>

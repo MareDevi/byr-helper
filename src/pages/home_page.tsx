@@ -174,7 +174,8 @@ export default function HomePage() {
                         data: todos,
                         columns: columns,
                         rowKey: 'Id',
-                        onRowClick: handleRowClick
+                        onRowClick: handleRowClick,
+                        hideAction: true
                     })}
                 </div>
             </div>
