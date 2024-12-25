@@ -75,7 +75,7 @@ pub async fn get_course_detail(
     tenant_id: &str,
     auth_token: &str,
     course_id: &str,
-) -> Result<()> {
+) -> Result<String> {
     let client = reqwest::Client::new();
     let headers = build_headers(blade, tenant_id, auth_token);
 
@@ -87,9 +87,9 @@ pub async fn get_course_detail(
         .await?;
 
     let json: serde_json::Value = response.json().await?;
-    println!("{}", json["data"]);
+    let result = json["data"].clone();
 
-    Ok(())
+    Ok(result.to_string())
 }
 
 pub async fn get_course_files(
@@ -98,7 +98,7 @@ pub async fn get_course_files(
     user_id: &str,
     auth_token: &str,
     course_id: &str,
-) -> Result<()> {
+) -> Result<Vec<Value>> {
     let client = reqwest::Client::new();
     let headers = build_headers(blade, tenant_id, auth_token);
 
@@ -114,15 +114,15 @@ pub async fn get_course_files(
 
     let json: serde_json::Value = response.json().await?;
     let data = json["data"].as_array().unwrap();
-
+    
     // Process main attachments
-    data.iter()
+    let resources = data.iter()
         .flat_map(|record| {
             let attachments = record["attachmentVOs"]
                 .as_array()
                 .into_iter()
                 .flatten()
-                .map(|attachment| &attachment["resource"]);
+                .map(|attachment| attachment["resource"].clone());
 
             let child_attachments = record["children"]
                 .as_array()
@@ -133,21 +133,14 @@ pub async fn get_course_files(
                         .as_array()
                         .into_iter()
                         .flatten()
-                        .map(|attachment| &attachment["resource"])
+                        .map(|attachment| attachment["resource"].clone())
                 });
 
             attachments.chain(child_attachments)
         })
-        .for_each(|resource| {
-            println!(
-                "{} {} {}",
-                resource["name"].as_str().unwrap(),
-                resource["storageId"].as_str().unwrap(),
-                resource["ext"].as_str().unwrap()
-            );
-        });
+        .collect();
 
-    Ok(())
+    Ok(resources)
 }
 
 pub async fn get_assignments(
@@ -228,9 +221,9 @@ pub async fn get_todo_list(
 }
 
 pub async fn download_course_file(
-    file_name: &str,
     storage_id: &str,
     file_format: &str,
+    path: &str,
 ) -> Result<()> {
     let client = reqwest::Client::new();
     let headers = reqwest::header::HeaderMap::from_iter(
@@ -265,9 +258,11 @@ pub async fn download_course_file(
         .headers(headers)
         .send()
         .await?;
+    
+    let path = path::Path::new(path);
 
     let bytes = response.bytes().await?;
-    std::fs::write(file_name, bytes)?;
+    std::fs::write(path, bytes)?;
     Ok(())
 }
 

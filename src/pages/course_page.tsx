@@ -2,10 +2,13 @@ import { invoke } from '@tauri-apps/api/core';
 import { useAuth } from "../AuthContext";
 import { useEffect, useState } from 'react';
 import CardBuilder from '../components/card';
+import CourseDetailPage from './course_detail_page';
 
 export default function CoursePage() {
     const { authInfo } = useAuth();
     const [courseList, setCourseList] = useState<string[]>([]);
+    const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+    const [showDetail, setShowDetail] = useState(false);
 
     useEffect(() => {
         // 先尝试从缓存加载数据
@@ -42,16 +45,33 @@ export default function CoursePage() {
     }
 
     const handleCardClick = (id: string) => {
-        // TODO: 处理课程点击事件
-        console.log('Course clicked:', id);
+        setSelectedCourse(id);
+        setShowDetail(true);
+    };
+
+    const handleBack = () => {
+        setShowDetail(false);
+        setSelectedCourse(null);
     };
 
     return (
         <div>
-            <div className="p-4">
-                <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-neutral-200">课程</h1>
-                <CardBuilder data={courseList} onCardClick={handleCardClick} />
-            </div>
+            {!showDetail ? (
+                <div className="p-4">
+                    <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-neutral-200">课程</h1>
+                    <CardBuilder data={courseList} onCardClick={handleCardClick} />
+                </div>
+            ) : (
+                <div>
+                    <button 
+                        onClick={handleBack}
+                        className="mb-4 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:text-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                    >
+                        返回课程列表
+                    </button>
+                    {selectedCourse && <CourseDetailPage courseId={selectedCourse} />}
+                </div>
+            )}
         </div>
     );
 }

@@ -113,3 +113,41 @@ pub async fn get_courses(
         Err(e) => Err(e.to_string()),
     }
 }
+
+#[tauri::command]
+pub async fn get_course_detail(
+    blade: &str,
+    tenant_id: &str,
+    auth_token: &str,
+    course_id: &str,
+) -> Result<String, String> {
+    match bupt_api::get_course_detail(blade, tenant_id, auth_token, course_id).await {
+        Ok(result) => Ok(result),
+        Err(e) => Err(e.to_string()),
+    }
+}
+
+#[tauri::command]
+pub async fn get_course_files(
+    blade: &str,
+    tenant_id: &str,
+    user_id: &str,
+    auth_token: &str,
+    course_id: &str,
+) -> Result<Vec<String>, String> {
+    match bupt_api::get_course_files(blade, tenant_id, user_id, auth_token, course_id).await {
+        Ok(vec) => Ok(vec.into_iter().map(|v| v.to_string()).collect()),
+        Err(e) => Err(e.to_string()),
+    }
+}
+
+#[tauri::command]
+pub async fn download_course_file(
+    storage_id: &str,
+    file_format: &str,
+    path: &str) -> Result<(), String> {
+    match bupt_api::download_course_file(storage_id, file_format, path).await {
+        Ok(_) => Ok(()),
+        Err(e) => Err(e.to_string()),
+    }
+    }
