@@ -76,13 +76,13 @@ pub async fn download_assignment_file(
     }
 }
 
-// #[tauri::command]
-// pub async fn get_course_schedule(
-//     account: &str,
-//     password: &str,
-// ) -> Result<Vec<HashMap<String, String>>, String> {
-//     match process::course::process_course_schedule(account, password).await {
-//         Ok(vec) => Ok(vec),
-//         Err(e) => Err(e.to_string()),
-//     }
-// }
+#[tauri::command]
+pub async fn get_course_schedule(
+    account: &str,
+    password: &str,
+) -> Result<String, String> {
+    match bupt_api::jwxt_api::get_course_schedule(account, password).await {
+        Ok(vec) => Ok(vec),
+        Err(e) => Err(e.to_string()),
+    }
+}

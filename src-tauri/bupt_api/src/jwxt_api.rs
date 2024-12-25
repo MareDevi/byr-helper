@@ -71,11 +71,11 @@ async fn jwxt_auth(account: &str, password: &str) -> Result<Client, Box<dyn std:
     Ok(client)
 }
 
-async fn get_course_schedule(account: &str, password: &str) -> Result<String, Box<dyn std::error::Error>> {
+pub async fn get_course_schedule(account: &str, password: &str) -> Result<String, Box<dyn std::error::Error>> {
     
     let client = jwxt_auth(account, password).await?;
     
-    let schedule_url = "https://jwgl.bupt.edu.cn/jsxsd/xskb/xskb_list.do";
+    let schedule_url = "https://jwgl.bupt.edu.cn/jsxsd/framework/xsdPerson.jsp";
 
     let mut headers = reqwest::header::HeaderMap::new();
     headers.insert("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8".parse()?);
@@ -92,13 +92,35 @@ async fn get_course_schedule(account: &str, password: &str) -> Result<String, Bo
 
     let document = Html::parse_document(&schedule_response.text().await?);
     
-    let table_selector = Selector::parse("table#kbtable").unwrap();
+    let table_selector = Selector::parse("div.table-content").unwrap();
+    let ul_selector = Selector::parse("div.table-class > ul").unwrap();
+    let li_selector = Selector::parse("li").unwrap();
 
-    // 只获取id为kbtable的表格
     if let Some(table) = document.select(&table_selector).next() {
-        Ok(table.html())
-    }
-    else {
+        let mut table_html = table.html();
+        
+        // 处理所有table-class div中的ul元素
+        let table_doc = Html::parse_fragment(&table_html);
+        for ul_element in table_doc.select(&ul_selector) {
+                let mut new_ul_content = String::new();
+                
+                // 获取原ul的HTML内容
+                let ul_html = ul_element.html();
+                let ul_fragment = Html::parse_fragment(&ul_html);
+                
+                // 重构ul内容,只保留第1和第6个li
+                for (index, li) in ul_fragment.select(&li_selector).enumerate() {
+                    if index == 0 || index == 5 {
+                        new_ul_content.push_str(&li.html());
+                    }
+                }
+                
+                // 替换原ul内容
+                table_html = table_html.replace(&ul_html, &new_ul_content);
+        }
+        
+        Ok(table_html)
+    } else {
         Ok("No course schedule found.".to_string())
     }
 }

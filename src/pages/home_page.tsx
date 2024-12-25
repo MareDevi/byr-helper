@@ -62,6 +62,7 @@ export default function HomePage() {
             }
         };
         fetchTodos();
+        console.log("Auth info:", authInfo);
     }, [authInfo]);
 
     const fetchTodoDetail = async (assignmentId: string) => {

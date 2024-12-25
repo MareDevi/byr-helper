@@ -37,7 +37,7 @@ pub fn get_auth_info() -> Result<Vec<String>> {
     let auth_content = std::fs::read_to_string(auth_path)?;
     let json: serde_json::Value = serde_json::from_str(&auth_content)?;
 
-    let result = vec!["blade", "tenant_id", "user_id", "auth_token"]
+    let result = vec!["blade", "tenant_id", "user_id", "auth_token", "account", "ucloud_password", "jwxt_password"]
         .into_iter()
         .map(|key| json[key].as_str().unwrap().to_string())
         .collect::<Vec<String>>();
