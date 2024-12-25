@@ -41,10 +41,13 @@ export default function CoursePage() {
 
     return (
         <div className="w-full h-full overflow-auto">
+            <div>
+                <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-neutral-200">本周课表</h1>
             <div 
                 dangerouslySetInnerHTML={{ __html: htmlContent }}
                 className="course-schedule-container"
             />
+            </div>
         </div>
     );
 }

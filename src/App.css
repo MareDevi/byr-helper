@@ -1,93 +1,107 @@
+/* 引入Tailwind基础样式 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
-}
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafb);
-}
+/* 根元素样式设置 */
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
+  /* 基础样式变量 */
+  --text-primary: #2c3e50;
+  --text-secondary: #606f7b;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --border-color: #e2e8f0;
+  --hover-color: #edf2f7;
+  
+  /* 课程块主题色 */
+  --course-theme-0: #467be7;
+  --course-theme-1: #ff781e;
+  --course-theme-2: #f05644;
+  --course-theme-3: #3c6ae0;
+  --course-theme-4: #17a45c;
+  --course-theme-5: #1f93ed;
+  --course-theme-6: #e89d00;
 
-  color: #0f0f0f;
-  background-color: #f6f6f6;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  /* 基础字体设置 */
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
+/* 深色模式配色 */
 @media (prefers-color-scheme: dark) {
   :root {
-    color: #f6f6f6;
-    background-color: #2f2f2f;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --border-color: #404040;
+    --hover-color: #333333;
   }
 }
 
+/* 课程表容器样式 */
 .course-schedule-container {
-  @apply p-4 md:p-6 rounded-xl shadow-sm;
+  @apply p-4 rounded-lg;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
 }
 
-.course-schedule-container:hover {
-  @apply shadow-md transition-shadow duration-300;
-}
-
-@media (prefers-color-scheme: dark) {
-  .course-schedule-container {
-    @apply  border;
-  }
-}
-
+/* 表格内容区域 */
 .table-content {
+  /* 设置内容区域高度 */
   height: calc(100% - 46px);
 }
+
+/* 表格头部样式 */
 .table-header {
   display: flex;
   height: 50px;
   display: flex;
-  border-bottom: 1px solid #e9eff4;
+  /* border-bottom: 1px solid #e9eff4; */
+  border-bottom: 1px solid var(--border-color);
 }
+
+/* 表格头部第一列样式 */
 .table-header .table-header-one {
   line-height: 50px;
   width: 120px;
   max-width: 120px;
-  font-family: MicrosoftYaHei-Bold;
   font-weight: 700;
   font-size: 16px;
-  color: #999999;
+  color: #f7ecec;
   letter-spacing: 0;
   text-align: center;
 }
+
+/* 表格头部列表项样式 */
 .table-header li {
   display: flex;
   flex-grow: 1;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  font-family: MicrosoftYaHei;
   font-size: 14px;
-  color: #666666;
+  color: #d1d1d1;
   letter-spacing: 0;
 }
+
+/* 表格主体样式 */
 .table-body {
   position: relative;
   height: calc(100% - 50px);
   overflow: auto;
 }
+
+/* 表格主体列表样式 */
 .table-body > ul {
   display: flex;
-  border-bottom: 1px solid #e9eff4;
+  /* border-bottom: 1px solid #e9eff4; */
+  border-bottom: 1px solid var(--border-color);
 }
+
+/* 表格主体第一列样式 */
 .table-body ul .row-one {
   display: flex;
   align-items: center;
@@ -97,52 +111,76 @@
   max-width: 120px;
   height: 94px;
 }
+
+/* 表格主体第一列标题样式 */
 .table-body ul .row-one h5 {
   font-family: MicrosoftYaHei;
   font-size: 14px;
-  color: #666666;
+  color: #e1e1e1;
   letter-spacing: 0;
   text-align: center;
   margin-bottom: 2px;
 }
+
+/* 表格主体第一列文本样式 */
 .table-body ul .row-one span {
   font-family: MicrosoftYaHei;
   font-size: 12px;
-  color: #999999;
+  color: #e1e1e1;
   letter-spacing: 0;
   text-align: center;
   display: flex;
   align-items: center;
 }
+
+/* 表格主体第一列文本间距 */
 .table-body ul .row-one span + span {
   margin-top: 2px;
 }
+
+/* 表格主体第一列图标样式 */
 .table-body ul .row-one span iconpark-icon {
   margin-right: 2px;
   font-size: 11px;
 }
+
+/* 表格主体列表项样式 */
 .table-body > ul > li {
   flex-grow: 1;
-  border-left: 1px solid #e9eff4;
+  /* border-left: 1px solid #e9eff4; */
 }
 
+/* 课程块基础样式 */
 .table-class {
+  /* 绝对定位 */
   position: absolute;
+  /* 计算宽度 */
   width: calc((100% - 127px) / 7 - 4px);
+  /* 圆角设置 */
   border-radius: 4px;
+  /* 内边距 */
   padding: 10px 8px;
+  /* 溢出隐藏 */
   overflow: hidden;
+  @apply rounded shadow-sm;
+  transition: all 0.3s ease;
 }
+
+/* 课程块间距样式 */
 .table-class > div + div {
   position: relative;
   margin-top: 21px;
 }
+
+/* 课程块间距样式 */
 .table-class > div + div::before {
   content: '';
   position: absolute;
   top: -10px;
   width: 100%;
 }
+
+/* 课程块悬浮效果 */
 .table-class::before {
   content: '';
   position: absolute;
@@ -152,171 +190,247 @@
   height: 100%;
 }
 
-
+/* 课程块颜色0悬浮效果 */
 .table-class.xqcolor0:hover:before {
   border-left: 3px solid #467be7;
 }
+
+/* 课程块颜色0样式 */
 .table-class.xqcolor0 {
-  background-color: #e1ebff;
+  background-color: color-mix(in srgb, var(--course-theme-0) 15%, transparent);
   color: #467be7;
 }
+
+/* 课程块颜色0位置 */
 .table-class.day0 {
   /* height: calc(3 * 75px - 4px);
   top: calc((2 * 75px) + 2px);*/
   left: calc(0 * ((100% - 120px) / 7) + 123px);
 }
+
+/* 课程块颜色0文本样式 */
 .table-class.xqcolor0 li {
   color: rgba(70, 123, 231, 0.8);
 }
+
+/* 课程块颜色0间距样式 */
 .table-class.day0 > div + div::before {
   border-top: 1px dashed #467be7;
 }
 
-
-
+/* 课程块颜色1悬浮效果 */
 .table-class.xqcolor1:hover:before {
   border-left: 3px solid #ff781e;
 }
+
+/* 课程块颜色1样式 */
 .table-class.xqcolor1 {
-  background-color: #ffecdf;
+  background-color: color-mix(in srgb, var(--course-theme-1) 15%, transparent);
   color: #ff781e;
 }
+
+/* 课程块颜色1位置 */
 .table-class.day1 {
   /*  height: calc(2 * 75px - 4px);
   top: calc((1 * 75px) + 2px);*/
   left: calc(1 * ((100% - 120px) / 7) + 123px);
 }
+
+/* 课程块颜色1文本样式 */
 .table-class.xqcolor1 li {
   color: rgba(255, 120, 30, 0.8);
 }
+
+/* 课程块颜色1间距样式 */
 .table-class.day1 > div + div::before {
   border-top: 1px dashed #ff781e;
 }
 
-
+/* 课程块颜色2悬浮效果 */
 .table-class.xqcolor2:hover:before {
-  border-left: 3px solid #f05644;
+  border-left: 3px solid #ada8a7;
 }
+
+/* 课程块颜色2样式 */
 .table-class.xqcolor2 {
-  background-color: #fcdfdb;
-  color: #f05644;
+  background-color: #585858;
+  color: #9a9a9a;
 }
+
+/* 课程块颜色2位置 */
 .table-class.day2 {
   /* height: calc(2 * 75px - 4px);
   top: calc((3 * 75px) + 2px);*/
   left: calc(2 * ((100% - 120px) / 7) + 123px);
 }
+
+/* 课程块颜色2文本样式 */
 .table-class.xqcolor2 li {
-  color: rgba(240, 86, 68, 0.8);
+  color: #9a9a9a;
 }
+
+/* 课程块颜色2间距样式 */
 .table-class.day2 > div + div::before {
-  border-top: 1px dashed #f05644;
+  border-top: 1px dashed #9a9a9a;
 }
 
-
+/* 课程块颜色3悬浮效果 */
 .table-class.xqcolor3:hover:before {
   border-left: 3px solid #3c6ae0;
 }
+
+/* 课程块颜色3样式 */
 .table-class.xqcolor3 {
-  background-color: #e7edfb;
+  background-color: color-mix(in srgb, var(--course-theme-3) 15%, transparent);
   color: #3c6ae0;
 }
+
+/* 课程块颜色3位置 */
 .table-class.day3 {
   /*  height: calc(3 * 75px - 4px);
   top: calc((6 * 75px) + 2px);*/
   left: calc(3 * ((100% - 120px) / 7) + 123px);
 }
+
+/* 课程块颜色3文本样式 */
 .table-class.xqcolor3 li {
   color: rgba(60, 106, 224, 0.8);
 }
+
+/* 课程块颜色3间距样式 */
 .table-class.day3 > div + div::before {
   border-top: 1px dashed #3c6ae0;
 }
 
+/* 课程块颜色4悬浮效果 */
 .table-class.xqcolor4:hover:before {
   border-left: 3px solid #17a45c;
 }
+
+/* 课程块颜色4样式 */
 .table-class.xqcolor4 {
-  background-color: #e4f8ef;
+  background-color: color-mix(in srgb, var(--course-theme-4) 15%, transparent);
   color: #17a45c;
 }
+
+/* 课程块颜色4位置 */
 .table-class.day4 {
   /*  height: calc(2 * 75px - 4px);
   top: calc((2 * 75px) + 2px);*/
   left: calc(4 * ((100% - 120px) / 7) + 123px);
 }
+
+/* 课程块颜色4文本样式 */
 .table-class.xqcolor4 li {
   color: rgba(23, 164, 92, 0.8);
 }
+
+/* 课程块颜色4间距样式 */
 .table-class.day4 > div + div::before {
   border-top: 1px dashed #17a45c;
 }
 
-
+/* 课程块颜色5悬浮效果 */
 .table-class.xqcolor5:hover:before {
   border-left: 3px solid #1f93ed;
 }
+
+/* 课程块颜色5样式 */
 .table-class.xqcolor5 {
-  background-color: #e5f3fd;
+  background-color: color-mix(in srgb, var(--course-theme-5) 15%, transparent);
   color: #1f93ed;
 }
+
+/* 课程块颜色5位置 */
 .table-class.day5 {
   /*  height: calc(3 * 75px - 4px);
   top: calc((3 * 75px) + 2px);*/
   left: calc(5 * ((100% - 120px) / 7) + 123px);
 }
+
+/* 课程块颜色5文本样式 */
 .table-class.xqcolor5 li {
   color: rgba(31, 147, 237, 0.8);
 }
+
+/* 课程块颜色5间距样式 */
 .table-class.day5 > div + div::before {
   border-top: 1px dashed #1f93ed;
 }
 
+/* 课程块颜色6悬浮效果 */
 .table-class.xqcolor6:hover:before {
   border-left: 3px solid #e89d00;
 }
+
+/* 课程块颜色6样式 */
 .table-class.xqcolor6 {
-  background-color: #fff8da;
+  background-color: color-mix(in srgb, var(--course-theme-6) 15%, transparent);
   color: #e89d00;
 }
+
+/* 课程块颜色6位置 */
 .table-class.day6 {
   /*  height: calc(3 * 75px - 4px);
   top: calc((2 * 75px) + 2px);*/
   left: calc(6 * ((100% - 120px) / 7) + 123px);
 }
+
+/* 课程块颜色6文本样式 */
 .table-class.xqcolor6 li {
   color: rgba(232, 157, 0, 0.8);
 }
+
+/* 课程块颜色6间距样式 */
 .table-class.day6 > div + div::before {
   border-top: 1px dashed #e89d00;
 }
 
+/* 课程块标题样式 */
 .table-class h4 {
-  font-family: SourceHanSansCN-Medium;
+  /* 字体设置 */
   font-weight: 500;
   font-size: 12px;
   letter-spacing: 0;
   margin-bottom: 8px;
+  color: var(--text-primary);
+  @apply text-sm;
 }
+
+/* 课程块列表样式 */
 .table-class ul {
   display: flex;
   flex-direction: column;
 }
+
+/* 课程块列表项样式 */
 .table-class li {
   display: flex;
-  font-family: MicrosoftYaHei;
   font-size: 12px;
   letter-spacing: 0;
   line-height: 14px;
   word-break: break-all;
+  color: var(--text-primary);
+  @apply text-sm;
 }
+
+/* 课程块列表项间距 */
 .table-class li + li {
   margin-top: 5px;
 }
+
+/* 课程块段落样式 */
 .table-class p {
   white-space: nowrap;
-  font-family: MicrosoftYaHei;
   font-size: 12px;
   letter-spacing: 0;
   line-height: 14px;
+  color: var(--text-primary);
+  @apply text-sm;
+}
+
+/* 课程块悬浮效果 */
+.table-class:hover {
+  transform: translateY(-1px);
+  @apply shadow-md;
 }
