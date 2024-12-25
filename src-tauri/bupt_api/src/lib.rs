@@ -300,6 +300,27 @@ pub async fn download_assignment_file(
     Ok(())
 }
 
+pub async fn get_notifications(
+    blade: &str,
+    tenant_id: &str,
+    user_id: &str,
+    auth_token: &str,
+) -> Result<Vec<Value>> {
+    let client = reqwest::Client::new();
+    let headers = build_headers(blade, tenant_id, auth_token);
+
+    let response = client
+        .post(format!("{}/ykt-basics/api/inform/news/list", UCLOUD_API_URL))
+        .headers(headers)
+        .query(&[("userId", user_id), ("size", "50")])
+        .send()
+        .await?;
+
+    let json: serde_json::Value = response.json().await?;
+    let records = json["data"]["records"].as_array().unwrap();
+    Ok(records.to_vec())
+}
+
 //unit test
 #[cfg(test)]
 mod tests {
@@ -405,5 +426,13 @@ mod tests {
         )
         .await
         .unwrap();
+    }
+
+    #[tokio::test]
+    async fn test_get_notifications() {
+        let auth_info = get_auth_info().unwrap();
+        get_notifications(&auth_info[0], &auth_info[1], &auth_info[2], &auth_info[3])
+            .await
+            .unwrap();
     }
 }

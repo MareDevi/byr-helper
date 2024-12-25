@@ -42,6 +42,18 @@ export default function HomePage() {
     
     useEffect(() => {
         const fetchTodos = async () => {
+            // 先尝试从缓存加载数据
+            const cachedData = localStorage.getItem('todos');
+            const cachedTime = localStorage.getItem('todos_time');
+            
+            if (cachedData && cachedTime) {
+                const timeDiff = Date.now() - parseInt(cachedTime);
+                // 如果缓存时间小于5分钟，使用缓存数据
+                if (timeDiff < 5 * 60 * 1000) {
+                    setTodos(JSON.parse(cachedData));
+                }
+            }
+
             try {
                 const result = await invoke("get_todo", { 
                     blade: authInfo[0], 
@@ -57,12 +69,15 @@ export default function HomePage() {
                     Id: todo.Id.replace(/\"/g, '')
                 }));
                 setTodos(processedTodos);
+                // 更新缓存
+                localStorage.setItem('todos', JSON.stringify(processedTodos));
+                localStorage.setItem('todos_time', Date.now().toString());
             } catch (error) {
                 console.error("Failed to fetch todos:", error);
             }
         };
+        
         fetchTodos();
-        console.log("Auth info:", authInfo);
     }, [authInfo]);
 
     const fetchTodoDetail = async (assignmentId: string) => {

@@ -86,3 +86,17 @@ pub async fn get_course_schedule(
         Err(e) => Err(e.to_string()),
     }
 }
+
+
+#[tauri::command]
+pub async fn get_notifications(
+    blade: &str,
+    tenant_id: &str,
+    user_id: &str,
+    auth_token: &str,
+) -> Result<Vec<String>, String> {
+    match process::notifications::process_notifications(blade, tenant_id, user_id, auth_token).await {
+        Ok(vec) => Ok(vec),
+        Err(e) => Err(e.to_string()),
+    }
+}

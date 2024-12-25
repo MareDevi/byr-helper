@@ -260,6 +260,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "bupt_api",
+ "regex",
  "serde",
  "serde_json",
  "tauri",

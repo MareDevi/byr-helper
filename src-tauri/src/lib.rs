@@ -13,7 +13,8 @@ pub fn run() {
             commands::get_todo,
             commands::get_todo_dtail,
             commands::download_assignment_file,
-            commands::get_course_schedule
+            commands::get_course_schedule,
+            commands::get_notifications,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -54,7 +54,6 @@ async fn jwxt_auth(account: &str, password: &str) -> Result<Client, Box<dyn std:
         }
     }
 
-    println!("{}", encoded);
     
     let mut login_data = HashMap::new();
     login_data.insert("userAccount", account);
