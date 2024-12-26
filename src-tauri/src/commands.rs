@@ -16,15 +16,6 @@ pub async fn get_auth(
 }
 
 #[tauri::command]
-pub fn check_auth() -> Result<Vec<String>, String> {
-    match interface::bupt_api::get_auth_info() {
-        //get_auth_info() return a Result: Ok(Vec<String>) or Err(_)
-        Ok(vec) => Ok(vec),
-        Err(e) => Err(e.to_string()),
-    }
-}
-
-#[tauri::command]
 pub async fn get_todo(
     blade: &str,
     tenant_id: &str,

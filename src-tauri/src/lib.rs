@@ -12,7 +12,6 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
             commands::get_auth,
-            commands::check_auth,
             commands::get_todo,
             commands::get_todo_dtail,
             commands::download_assignment_file,
