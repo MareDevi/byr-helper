@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { invoke } from '@tauri-apps/api/core';
+import { readTextFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -17,7 +17,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     async function fetchAuthInfo() {
       try {
-        const result: string[] = await invoke("check_auth");
+        const auth_json = await readTextFile('auth.json', {
+          baseDir: BaseDirectory.AppData,
+        });
+        
+        const authData = JSON.parse(auth_json);
+        const result = [
+          authData.blade,
+          authData.tenant_id,
+          authData.user_id,
+          authData.auth_token,
+          authData.account,
+          authData.ucloud_password,
+          authData.jwxt_password
+        ];
+        
         setAuthInfo(result);
         setIsAuthenticated(true);
       } catch (err: any) {
