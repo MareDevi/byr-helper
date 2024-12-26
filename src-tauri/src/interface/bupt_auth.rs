@@ -1,12 +1,11 @@
 use flate2::read::GzDecoder;
 use regex::Regex;
-use reqwest::header::COOKIE;
-use reqwest::header::*;
-use reqwest::Client;
+use tauri_plugin_http::reqwest::header::COOKIE;
+use tauri_plugin_http::reqwest::header::*;
+use tauri_plugin_http::reqwest::Client;
+use tauri_plugin_http::reqwest::Response;
 use serde_json;
 use std::collections::HashMap;
-use tokio::fs::File;
-use tokio::io::AsyncWriteExt;
 use anyhow::Result;
 
 fn extract_values(html_content: &str) -> Option<String> {
@@ -19,7 +18,7 @@ fn extract_values(html_content: &str) -> Option<String> {
     }
 }
 
-async fn follow_redirects(client: &Client, mut res: reqwest::Response) -> reqwest::Response {
+async fn follow_redirects(client: &Client, mut res: Response) -> Response {
     while res.status().is_redirection() {
         let redirect_url = res.headers().get("Location").unwrap().to_str().unwrap();
         res = client.get(redirect_url).send().await.unwrap();
@@ -58,12 +57,12 @@ fn extract_auth_and_tenant(js_content: &str) -> (String, String) {
     (auth_token, tenant_id)
 }
 
-pub async fn bupt_auth(account: String, ucloud_password: String, jwxt_password: String) -> Result<()> {
+pub async fn bupt_auth(account: String, ucloud_password: String, jwxt_password: String) -> Result<String> {
     let auth_url = "https://auth.bupt.edu.cn/authserver/login?service=http://ucloud.bupt.edu.cn";
 
     let client = Client::builder()
         .cookie_store(true)
-        .redirect(reqwest::redirect::Policy::none())
+        .redirect(tauri_plugin_http::reqwest::redirect::Policy::none())
         .build()
         ?;
 
@@ -206,8 +205,6 @@ pub async fn bupt_auth(account: String, ucloud_password: String, jwxt_password: 
     map.insert("auth_token", auth_token);
 
     let json = serde_json::to_string(&map).unwrap();
-    let mut file = File::create("../auth.json").await?;
-    file.write_all(json.as_bytes()).await?;
 
-    Ok(())
+    Ok(json)
 }

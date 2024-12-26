@@ -1,5 +1,5 @@
 use anyhow::Result;
-use bupt_api::get_todo_list;
+use crate::interface::bupt_api::get_todo_list;
 
 pub async fn process_todo_list(
     blade: &str,

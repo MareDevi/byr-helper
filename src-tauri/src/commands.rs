@@ -1,20 +1,23 @@
-use crate::process;
+use crate::{interface, process};
 use crate::process::assignment::ResourceInfo;
 use anyhow::Result;
-use bupt_api::bupt_auth::bupt_auth;
 use std::collections::HashMap;
 
 #[tauri::command]
-pub async fn get_auth(account: String, ucloud_password: String, jwxt_password: String) -> Result<(), String> {
-    match bupt_auth(account, ucloud_password, jwxt_password).await {
-        Ok(_) => Ok(()),
+pub async fn get_auth(
+    account: String,
+    ucloud_password: String,
+    jwxt_password: String,
+) -> Result<String, String> {
+    match interface::bupt_auth::bupt_auth(account, ucloud_password, jwxt_password).await {
+        Ok(json) => Ok(json),
         Err(e) => Err(e.to_string()),
     }
 }
 
 #[tauri::command]
 pub fn check_auth() -> Result<Vec<String>, String> {
-    match bupt_api::get_auth_info() {
+    match interface::bupt_api::get_auth_info() {
         //get_auth_info() return a Result: Ok(Vec<String>) or Err(_)
         Ok(vec) => Ok(vec),
         Err(e) => Err(e.to_string()),
@@ -62,14 +65,7 @@ pub async fn download_assignment_file(
     path: &str,
     resource_id: &str,
 ) -> Result<(), String> {
-    match bupt_api::download_assignment_file(
-        blade,
-        tenant_id,
-        auth_token,
-        path,
-        resource_id,
-    )
-    .await
+    match interface::bupt_api::download_assignment_file(blade, tenant_id, auth_token, path, resource_id).await
     {
         Ok(_) => Ok(()),
         Err(e) => Err(e.to_string()),
@@ -77,16 +73,12 @@ pub async fn download_assignment_file(
 }
 
 #[tauri::command]
-pub async fn get_course_schedule(
-    account: &str,
-    password: &str,
-) -> Result<String, String> {
-    match bupt_api::jwxt_api::get_course_schedule(account, password).await {
+pub async fn get_course_schedule(account: &str, password: &str) -> Result<String, String> {
+    match interface::jwxt_api::get_course_schedule(account, password).await {
         Ok(vec) => Ok(vec),
         Err(e) => Err(e.to_string()),
     }
 }
-
 
 #[tauri::command]
 pub async fn get_notifications(
@@ -95,7 +87,8 @@ pub async fn get_notifications(
     user_id: &str,
     auth_token: &str,
 ) -> Result<Vec<String>, String> {
-    match process::notifications::process_notifications(blade, tenant_id, user_id, auth_token).await {
+    match process::notifications::process_notifications(blade, tenant_id, user_id, auth_token).await
+    {
         Ok(vec) => Ok(vec),
         Err(e) => Err(e.to_string()),
     }
@@ -108,7 +101,7 @@ pub async fn get_courses(
     auth_token: &str,
     user_id: &str,
 ) -> Result<Vec<String>, String> {
-    match bupt_api::get_courses(blade, tenant_id, user_id, auth_token).await {
+    match interface::bupt_api::get_courses(blade, tenant_id, user_id, auth_token).await {
         Ok(vec) => Ok(vec.into_iter().map(|v| v.to_string()).collect()),
         Err(e) => Err(e.to_string()),
     }
@@ -121,7 +114,7 @@ pub async fn get_course_detail(
     auth_token: &str,
     course_id: &str,
 ) -> Result<String, String> {
-    match bupt_api::get_course_detail(blade, tenant_id, auth_token, course_id).await {
+    match interface::bupt_api::get_course_detail(blade, tenant_id, auth_token, course_id).await {
         Ok(result) => Ok(result),
         Err(e) => Err(e.to_string()),
     }
@@ -135,7 +128,7 @@ pub async fn get_course_files(
     auth_token: &str,
     course_id: &str,
 ) -> Result<Vec<String>, String> {
-    match bupt_api::get_course_files(blade, tenant_id, user_id, auth_token, course_id).await {
+    match interface::bupt_api::get_course_files(blade, tenant_id, user_id, auth_token, course_id).await {
         Ok(vec) => Ok(vec.into_iter().map(|v| v.to_string()).collect()),
         Err(e) => Err(e.to_string()),
     }
@@ -145,9 +138,10 @@ pub async fn get_course_files(
 pub async fn download_course_file(
     storage_id: &str,
     file_format: &str,
-    path: &str) -> Result<(), String> {
-    match bupt_api::download_course_file(storage_id, file_format, path).await {
+    path: &str,
+) -> Result<(), String> {
+    match interface::bupt_api::download_course_file(storage_id, file_format, path).await {
         Ok(_) => Ok(()),
         Err(e) => Err(e.to_string()),
     }
-    }
+}

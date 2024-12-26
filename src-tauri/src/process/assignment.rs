@@ -3,6 +3,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
+use crate::interface;
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ResourceInfo {
     resource_id: String,
@@ -15,7 +17,7 @@ pub async fn process_assignment_detail(
     auth_token: &str,
     assignment_id: &str,
 ) -> Result<(Vec<String>, HashMap<String, ResourceInfo>)> {
-    let data = bupt_api::get_assignment_detail(blade, tenant_id, auth_token, assignment_id).await?;
+    let data = interface::bupt_api::get_assignment_detail(blade, tenant_id, auth_token, assignment_id).await?;
     let mut detail = Vec::new();
     let mut resource_map = HashMap::new();
 

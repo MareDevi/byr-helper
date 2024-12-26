@@ -1,4 +1,4 @@
-use reqwest::Client;
+use tauri_plugin_http::reqwest::Client;
 use scraper::{Html, Selector};
 use std::collections::HashMap;
 
@@ -10,7 +10,7 @@ async fn jwxt_auth(account: &str, password: &str) -> Result<Client, Box<dyn std:
         .build()
         ?;
 
-    let mut headers = reqwest::header::HeaderMap::new();
+    let mut headers = tauri_plugin_http::reqwest::header::HeaderMap::new();
     headers.insert("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8".parse()?);
     headers.insert("Accept-Language", "en-US,en;q=0.5".parse()?);
     headers.insert("Connection", "keep-alive".parse()?);
@@ -76,7 +76,7 @@ pub async fn get_course_schedule(account: &str, password: &str) -> Result<String
     
     let schedule_url = "https://jwgl.bupt.edu.cn/jsxsd/framework/xsdPerson.jsp";
 
-    let mut headers = reqwest::header::HeaderMap::new();
+    let mut headers = tauri_plugin_http::reqwest::header::HeaderMap::new();
     headers.insert("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8".parse()?);
     headers.insert("Accept-Language", "en-US,en;q=0.5".parse()?);
     headers.insert("Connection", "keep-alive".parse()?);

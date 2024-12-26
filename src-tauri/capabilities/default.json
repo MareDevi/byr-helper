@@ -8,6 +8,11 @@
   "permissions": [
     "core:default",
     "shell:allow-open",
-    "dialog:default"
+    "dialog:default",
+    "dialog:allow-save",
+    "http:default",
+    "fs:default",
+    "fs:allow-app-write",
+    "fs:allow-app-read"
   ]
 }

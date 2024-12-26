@@ -1,9 +1,7 @@
 use anyhow::Result;
-use reqwest;
+use tauri_plugin_http::reqwest;
 use serde_json::{self, Value};
 use std::path;
-pub mod bupt_auth;
-pub mod jwxt_api;
 
 const UCLOUD_API_URL: &str = "https://apiucloud.bupt.edu.cn";
 const UCLOUD_COURSE_FILE_URL: &str = "https://fileucloud.bupt.edu.cn/ucloud/document/";
